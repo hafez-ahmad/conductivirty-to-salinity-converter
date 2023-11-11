@@ -26,7 +26,9 @@ def conductivity_to_salinity(conductivity, temp, pressure=0.257):
     salinity = a0 + a1*RT**0.5 + a2*RT + a3*RT**1.5 + a4*RT**2 + a5*RT**2.5 + ((temp - 15)/(1 + k*(temp-15)))*(b0 + b1*RT**0.5 + b2*RT + b3*RT**1.5 + b4*RT**2 + b5*RT**2.5)
     # Units: psu
     extended_salinity = salinity - (a0/(1+1.5*x + x**2)) - (b0*f_t/(1+y**0.5+y+y**1.5))
-    return extended_salinit
+    return extended_salinity
 
-conductivity_file_path = r"D:\mss_wq_AllParams_ERDC_June_2023_union.csv"
-conductivity_salinity_from_file(conductivity_file_path)
+ C = 4.229 # conductivity in ms/cm
+ T = 26.706 # Temperature in degree celicius
+ salinity_convert = conductivity_to_salinity(C, T)
+ print(salinity_convert)
