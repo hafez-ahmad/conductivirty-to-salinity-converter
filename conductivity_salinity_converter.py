@@ -28,7 +28,30 @@ def conductivity_to_salinity(conductivity, temp, pressure=0.257):
     extended_salinity = salinity - (a0/(1+1.5*x + x**2)) - (b0*f_t/(1+y**0.5+y+y**1.5))
     return extended_salinity
 
- C = 4.229 # conductivity in ms/cm
- T = 26.706 # Temperature in degree celicius
- salinity_convert = conductivity_to_salinity(C, T)
- print(salinity_convert)
+def depth_to_pressure(lat):
+    depth = 0.254
+    g = 9.780318 * (1 + 0.0052788 * (np.sin(lat)) ** 2 + 0.0000236 * (np.sin(lat)) ** 3)
+    depth_func = (lambda x: (9.72659 * x - 0.000022512 * x ** 2 + 0.0000000002279 * x ** 3 - 0.00000000000000182 * x ** 4) / (g + 0.5 * 0.000002184 * x))
+    invDepth = inversefunc(depth_func)
+    pressure = invDepth(depth)
+    return  pressure
+
+def conductivity_salinity_from_file(file):
+    df = pd.read_csv(file)
+    path = os.path.dirname(file)
+    out_file_name = os.path.basename(file)[0:-4] + '_salinity_converted.csv'
+    out_file_path = os.path.join(path, out_file_name)
+    df['salinity_convert'] = df.apply(lambda x: conductivity_to_salinity(x['conductivity'], x['temperature'], depth_to_pressure(x['latitude'])), axis=1)
+    df.to_csv(out_file_path)
+    print("Conductivity successfully converted to salinity and file saved to: ", out_file_path)
+
+# C = 43 # conductivity in ms/cm
+# T = 33 # Temperature in degree celicius
+# L = 30.134 #Latitude
+# P = depth_to_pressure(L) # Pressure in dBar 0.257 is the default pressure calculated for the ASV depth of 0.254 m
+# print("The converted pressure is: ", P)
+# salinity_convert = conductivity_to_salinity(C, T, P)
+# print(salinity_convert)
+
+conductivity_file_path = r'C:\MSU\GRA\RATasks\conductivity_salinity_converter\mss_geo_temperature_salinity_ERDC_June_2023_union_ed.csv'
+conductivity_salinity_from_file(conductivity_file_path)
