@@ -14,7 +14,7 @@ def conductivity_to_salinity(conductivity, temp, pressure=0.257):
     c0, c1, c2, c3, c4 = 6.766097E-01, 2.005640E-02, 1.104259E-04, -6.969800E-07, 1.003100E-09
     c_ratio = 4.2914 # units in S/m
 
-    R = (conductivity/10) / c_ratio  # The ASV measures conductivity in mS/cm and to convert to S/m divide it by 10
+    R = (conductivity/10) / c_ratio  # The ASV measures conductivity in mS/cm and to convert to S/m divide it by 10: 1 mS/cm = 0.1 S/m (https://www.translatorscafe.com/unit-converter/en-US/electric-conductivity/11-9/millisiemens/centimeter-siemens/centimeter/)
     Rp = 1 + (A1*pressure + A2*pressure**2 + A3*pressure**3) / (1 + B1*temp + B2*temp**2 + B3*R + B4*temp*R)
     rT = c0 + c1*temp + c2*temp**2 + c3*temp**3 + c4*temp**4
     RT = R / (rT*Rp)
