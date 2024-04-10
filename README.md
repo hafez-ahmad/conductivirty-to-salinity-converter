@@ -1,6 +1,24 @@
-# conductivirty-to-salinity-converter
-This code converts a given conductivity measurement (millisiemens per centimetre (mS/cm)) value to its corresponding salinity (PSU), given the temperature and water pressure.
+# Conductivity to Salinity Converter
+
+This code converts a given conductivity measurement (millisiemens per centimetre (mS/cm)) value to its corresponding salinity (practical salinity units, PSU), given the temperature and water pressure.
+
 If your conductivity was measured with a different unit, you need to update the conversion factor in line 17 of the code.
+
+## Example
+
+```python
+from conductivity_to_salinity import conductivity_to_salinity
+
+# Example input values
+conductivity = 35  # mS/cm
+temperature = 25  # Celsius
+pressure = 0.257  # decibars
+
+# Calculate salinity
+salinity = conductivity_to_salinity(conductivity, temperature, pressure)
+
+print("Salinity:", salinity, "PSU")
+
 
 The code works for three different scenarios:
 
